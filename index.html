@@ -969,6 +969,33 @@ function trCardDesarenador(){
     '<div class="row">'+campo("Velocidad en orificios Vor (m/s)","desVor","number",'step="0.01"')+campo("Diámetro del orificio (in)","desDor","number",'step="0.25"')+selec("Altura del deflector (H/…)","desDef",["2","3"])+campo("Tiempo t de la plataforma (s)","desTp","number",'step="0.5"')+'</div></div>';
   return h;}
 
+/* ========= 7. TARJETA: PARÁMETROS DE CANALETA PARSHALL ================ */
+function trCardParshall(){
+  var vHaW=PRO.parHaW===undefined||PRO.parHaW===null?"":PRO.parHaW;
+  var vBL=PRO.parBL===undefined||PRO.parBL===null?"":PRO.parBL;
+
+  var h='<div class="card">'+
+    '<div class="card-title">Parámetros de Canaleta Parshall</div>'+
+    '<div class="card-sub">Aforador y mezclador rápido. Define el ancho de garganta, la relación de carga y el borde libre.</div>'+
+    '<div class="row" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">'+
+
+    // Selector original de ancho de garganta
+    parSelW()+
+    // Relación Ha/W vinculada al módulo Parshall
+    '<div class="campo">'+
+      '<label>Relación Ha/W</label>'+
+      '<input id="trParHaW" type="number" placeholder="Ingrese un valor" value="'+vHaW+'" step="0.05" min="0.4" max="0.8" oninput="setPro(\'parHaW\',this,true)">'+
+    '</div>'+
+    // Borde libre vinculado al módulo Parshall
+    '<div class="campo">'+
+      '<label>Borde libre BL (m)</label>'+
+      '<input id="trParBL" type="number" placeholder="Ingrese un valor" value="'+vBL+'" step="0.05" min="0" oninput="setPro(\'parBL\',this,true)">'+
+    '</div>'+
+    '</div>'+
+    '</div>';
+
+  return h;}
+
 /* =======  8. VENTANA COMPLETA: ENSAMBLA TODAS LAS TARJETAS ======= */
 function pintarTR(){
   var h='<div class="titulo"><h1>TÉRMINOS DE REFERENCIA</h1><p>Parámetros generales del proyecto. Se guardan automáticamente y alimentan las ventanas de caudal de diseño y rejilla.</p></div>'+CONV;
@@ -979,6 +1006,7 @@ function pintarTR(){
   h+=trCardRejilla();
   h+=trCardAduccion();
   h+=trCardDesarenador();
+  h+=trCardParshall();
   gid("pane-tr").innerHTML=h;}
 
 
@@ -2201,9 +2229,9 @@ function parTablaComparacion(a){
       if(!r.ok.V2)mot.push('V2 ≤ 2 m/s');
       if(!r.ok.Fr)mot.push('Fr fuera de rango ('+r.tipo.replace('Resalto ','resalto ')+')');
       if(!r.ok.hc)mot.push('hc fuera de h2–h3');
-      td='<td>'+nf(r.haNat,3)+'</td><td>'+nf(r.rNat,2)+'</td><td>'+nf(r.ha,3)+(r.disp?' *':'')+'</td><td'+(r.ok.V2?'':' class="bad"')+'>'+nf(r.V2,2)+'</td><td'+(r.ok.Fr?'':' class="bad"')+'>'+nf(r.Fr,2)+'</td><td class="l'+(r.ok.Fr?'':' bad')+'">'+r.tipo.replace('Resalto ','')+'</td>';
-      est=x.cumple?'<span class="par-chip ok">✔ Cumple</span>':'<span class="par-chip no">✖ No cumple</span>';
-    }
+      td='<td>'+nf(r.haNat,3)+'</td><td>'+nf(r.rNat,2)+'</td><td>'+nf(r.ha,3)+(r.disp?'':'')+'</td><td'+(r.ok.V2?'':' class="bad"')+'>'+nf(r.V2,2)+'</td><td'+(r.ok.Fr?'':' class="bad"')+'>'+nf(r.Fr,2)+'</td><td class="l'+(r.ok.Fr?'':' bad')+'">'+r.tipo.replace('Resalto ','')+'</td>';
+      est=x.cumple?'<span class="par-chip ok">✔ Cumple</span>':'<span class="par-chip no">✖ No cumple</span>';}
+
     if(rango&&!r.err)acc=sel?'<span class="par-chip ok">En uso</span>':'<button class="par-usar" onclick="parUsarW(\''+f.id+'\')">Usar</button>';
     return '<tr class="'+cls+'"><td class="w">'+f.lab+' <span style="font-weight:400;color:var(--gris)">('+nf(f.W,3)+' m)</span></td><td>'+rangoTxt+'</td>'+td+'<td class="l est">'+est+'</td><td>'+acc+'</td></tr>';}).join('');
   var msg=a.auto?(a.fallback?'Ningún ancho cumple todos los criterios de mezcla con este caudal; se tomó el menor con solución dentro de su rango. Prueba dividir el caudal en más canaletas o revisa Ha/W objetivo.':'Selección automática: <b>W = '+a.sel.f.lab+' ('+nf(a.sel.f.W,3)+' m)</b>.'+(nOk>1?' Hay '+nOk+' anchos que cumplen; puedes elegir otro con el botón "Usar".':'')):'Ancho elegido manualmente: <b>W = '+a.sel.f.lab+' ('+nf(a.sel.f.W,3)+' m)</b>. '+(a.sel.cumple?'Cumple los criterios de mezcla.':'No cumple los criterios de mezcla; revisa la columna Estado.')+' <button class="par-usar" onclick="parUsarW(\'auto\')">Volver a automático</button>';
@@ -2292,7 +2320,7 @@ function svgPlantaPar(a){
   var up=[[x0-45,ym-hd],[x0,ym-hd],[x1,ym-hw],[x2,ym-hw],[x3,ym-hcc],[x3+45,ym-hcc]],dn=[[x0-45,ym+hd],[x0,ym+hd],[x1,ym+hw],[x2,ym+hw],[x3,ym+hcc],[x3+45,ym+hcc]];
   var pts=function(p){return p.map(function(q){return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' ');};
   var s='<svg viewBox="0 0 860 370" width="100%" style="max-width:880px">'+svgDefs()+
-   '<text x="430" y="20" font-size="13" font-weight="700" text-anchor="middle" fill="#15803D">VISTA EN PLANTA — canaleta Parshall W = '+f.lab+' (esquema sin escala exacta)</text>'+
+   '<text x="430" y="20" font-size="13" font-weight="700" text-anchor="middle" fill="#15803D">VISTA EN PLANTA — canaleta Parshall W = '+f.lab+'</text>'+
    '<polygon points="'+pts(up)+' '+pts(dn.slice().reverse())+'" fill="#DBEAFE"/>'+
    '<polyline points="'+pts(up)+'" fill="none" stroke="#15803D" stroke-width="4" stroke-linejoin="round"/>'+
    '<polyline points="'+pts(dn)+'" fill="none" stroke="#15803D" stroke-width="4" stroke-linejoin="round"/>'+
@@ -2331,7 +2359,7 @@ function svgPerfilPar(a){
   su.push([xR,Y(h3)]);
   var pts=function(p){return p.map(function(q){return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' ');};
   var s='<svg viewBox="0 0 900 '+(yBot+96)+'" width="100%" style="max-width:920px">'+svgDefs()+
-   '<text x="450" y="20" font-size="13" font-weight="700" text-anchor="middle" fill="#15803D">VISTA DE PERFIL — canaleta Parshall W = '+f.lab+' (esquema sin escala exacta)</text>'+
+   '<text x="450" y="20" font-size="13" font-weight="700" text-anchor="middle" fill="#15803D">VISTA DE PERFIL — canaleta Parshall W = '+f.lab+'</text>'+
    '<polygon points="'+pts(su)+' '+pts(fl.slice().reverse())+'" fill="#BFDBFE"/>'+
    '<polygon points="'+pts(fl)+' '+xR+','+yBot+' '+xL+','+yBot+'" fill="#E7ECE9"/>'+
    '<polyline points="'+pts(su)+'" fill="none" stroke="#2563EB" stroke-width="2"/>'+
@@ -2376,16 +2404,16 @@ function pintarParshall(){
   var bt='<div class="acciones"><button class="btn btn-primary" style="width:auto;padding:0 22px" onclick="recalcularParshall()">RECALCULAR</button><button class="btn-revision" onclick="parRevision()">REVISIÓN DE ERRORES</button><button class="btn-sec" onclick="abrirTodo(\'pane-m3\',true)">VER TODA LA MEMORIA DE CÁLCULO</button><button class="btn-sec" onclick="abrirTodo(\'pane-m3\',false)">CONTRAER TODO</button><button class="btn-sec" onclick="window.print()">IMPRIMIR</button></div>';
   h+=tarjetaDistribucionPar();
   h+='<div class="card"><div class="card-title">Parámetros de la canaleta</div><div class="card-sub">Si eliges "Automático", se toma el menor ancho de garganta que cumple los criterios de mezcla. Presiona RECALCULAR después de cambiar un dato. h5 (= E1, energía total disponible) y el ancho del canal de salida (C) se calculan o se leen de la tabla, no se ingresan.</div>'+
-   '<div class="row">'+parSelW()+campo("Ha/W objetivo con dispositivo (0,4 – 0,8)","parHaW","number",'step="0.05" min="0.4" max="0.8"')+campo("Temperatura del agua (°C)","parT","number",'step="0.5"')+'</div>'+
+   '<div class="row">'+parSelW()+campo("Ha/W objetivo con dispositivo (0,4 – 0,8)","parHaW","number",'step="0.05" min="0.4" max="0.8"')+'</div>'+
    '<div class="row">'+campo("Borde libre (m)","parBL","number",'step="0.05"')+'</div>'+bt+'</div>';
-  var a=parAnalizar();
-  if(a.err){
-    h+='<div class="aviso" style="background:#FEF2F2;border-color:#FECACA;color:#7F1D1D"><b>No se pudo calcular la canaleta.</b><ul style="margin:8px 0 0;padding-left:18px;line-height:1.7">'+a.err.map(function(m){return '<li>'+m+'</li>';}).join('')+'</ul></div>';
-    PRO.PAR=null;guardarPro();actualizarEstados();gid("pane-m3").innerHTML=h;return;}
-  if(a.sel.r.err){
-    h+=parTablaComparacion(a);
-    h+='<div class="aviso" style="background:#FEF2F2;border-color:#FECACA;color:#7F1D1D"><b>No se pudo calcular con W = '+a.sel.f.lab+'.</b><ul style="margin:8px 0 0;padding-left:18px;line-height:1.7">'+a.sel.r.err.map(function(m){return '<li>'+m+'</li>';}).join('')+'</ul></div>';
-    PRO.PAR=null;guardarPro();actualizarEstados();gid("pane-m3").innerHTML=h;return;}
+  
+   var a=parAnalizar();
+if(a.err || a.sel.r.err){
+  PRO.PAR=null;
+  guardarPro();
+  actualizarEstados();
+  gid("pane-m3").innerHTML=h;
+  return;}
   var r=a.sel.r;
   h+=parTablaComparacion(a);
   h+='<div class="card"><div class="card-title">Esquemas de la canaleta</div><div class="svg-wrap">'+svgPlantaPar(a)+'</div><div class="svg-wrap">'+svgPerfilPar(a)+'</div></div>';
