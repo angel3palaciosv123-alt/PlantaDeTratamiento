@@ -1,0 +1,11 @@
+VERIFICACIÓN DE ESTA ENTREGA
+Ejecutado (Node, DOM simulado):
+- node --check en todos los .js: OK.
+- Regresión original vs. modular con un proyecto de ejemplo: HTML de Datos preliminares, Términos de referencia,
+  Caudal, Rejilla, Aducción, Desarenador y Parshall IDÉNTICO (tras normalizar solo los identificadores renombrados:
+  pane-q->pane-caudal, irVista('q')->irVista('caudal'), T_INCL->DP.T.INCL, etc.). Variables PRO resultantes: idénticas.
+- Arranque simulado: menú (10 botones, 2 secciones, 7 indicadores), orden por 'orden', Inicio (10 tarjetas, avance de 7),
+  API de proyección, guardado/carga de estado extra, módulos "próximamente".
+NO ejecutado: prueba en navegador real (no había navegador disponible): login, animaciones/CSS, proyección con datos
+DANE, guardar/cargar .json con archivo real. Se recomienda abrir index.html y recorrer cada módulo una vez.
+Retirado: glosarioVariables() (código sin ningún llamado en el proyecto).
