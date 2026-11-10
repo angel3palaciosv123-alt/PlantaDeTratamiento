@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Trepalace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+
+<!-- =======================================================
+   INICIO DE SESION
+   ======================================================= -->
+<div id="login-wrap">
+  <section class="lg-visual">
+    <div class="lg-capa" id="lg-viento"></div>
+    <div class="lg-capa" id="lg-burb"></div>
+    <div class="lg-capa" id="lg-hojas"></div>
+    <div class="lg-centro">
+      <div class="lg-logo"><img class="em" alt="" src="img/logo_emblema.png"><img class="tx" alt="TREPALACE" src="img/logo_nombre.png"></div>
+      <div class="lg-lema">Soluciones ambientales y sanitarias para tus proyectos basados en tus necesidades</div>
+    </div>
+    <div class="lg-olas" aria-hidden="true">
+      <div class="lg-ola lg-o1"><svg viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0 60 C100 20 200 20 300 60 S500 100 600 60 S800 20 900 60 S1100 100 1200 60 V120H0Z"/></svg></div>
+      <div class="lg-ola lg-o2"><svg viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0 70 C100 100 200 100 300 70 S500 40 600 70 S800 100 900 70 S1100 40 1200 70 V120H0Z"/></svg></div>
+      <div class="lg-ola lg-o3"><svg viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0 80 C100 55 200 55 300 80 S500 105 600 80 S800 55 900 80 S1100 105 1200 80 V120H0Z"/></svg></div>
+    </div>
+  </section>
+  <section class="lg-lado">
+    <div id="lg-card">
+      <div class="lg-barra"></div>
+      <h2>Accede a tu proyecto</h2>
+      <p class="lg-sub">Ingresa tu usuario y contraseña para continuar.</p>
+      <div class="lg-campo">
+        <input id="lg-u" placeholder=" " autocomplete="username"><label for="lg-u">Usuario</label>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.2-6 8-6s6.8 2 8 6"/></svg>
+      </div>
+      <div class="lg-campo">
+        <input id="lg-p" type="password" placeholder=" " autocomplete="current-password"><label for="lg-p">Contraseña</label>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        <button type="button" class="lg-ojo" id="lg-ojo" aria-label="Mostrar u ocultar contraseña"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+      <div id="login-err" role="alert"></div>
+      <button id="lg-btn" type="button" onclick="lgEntrar()"><span class="txt">INICIAR SESIÓN</span><span class="giro"></span></button>
+      <button type="button" class="lg-olvido" onclick="var e=document.getElementById('login-err');e.textContent='Solicita el restablecimiento de tu contraseña al administrador del proyecto.';e.style.display='block'">¿Olvidaste tu contraseña?</button>
+      <div class="lg-pie">© TREPALACE 2026 </div>
+    </div>
+  </section>
+</div>
+
+<!-- =======================================================
+   BARRA LATERAL
+   ======================================================= -->
+<header class="m-bar" id="m-bar"><button class="sb-burger" id="sb-burger" aria-label="Abrir menú" aria-controls="topbar" aria-expanded="false" onclick="sbAbrirMovil()"><span data-ic="menu"></span></button><strong>TREPALACE</strong><span id="m-title"></span></header>
+<div class="sb-scrim" id="sb-scrim" onclick="sbCerrarMovil()"></div>
+<aside class="sb" id="topbar" aria-label="Navegación principal">
+  <div class="sb-head"><div class="sb-logo" data-logo></div><div class="sb-brand"><strong>TREPALACE</strong><span></span></div>
+    <button class="sb-collapse" id="sb-collapse" onclick="sbAlternar()" aria-expanded="true" aria-label="Contraer menú" title="Contraer menú"><span data-ic="colapsar"></span></button></div>
+  <nav class="sb-scroll">
+    <button class="tab-btn" id="tab-inicio" data-t="Inicio" title="Inicio" onclick="irVista('inicio')"><span class="ic" data-ic="inicio"></span><span class="lb">Inicio</span></button>
+  </nav>
+  <div class="sb-foot"><div class="lbl">Cuenta</div><div class="sb-usr"><div class="sb-av" id="sb-av">?</div><div class="sb-who"><span class="tb-user" id="tb-user"></span><small id="sb-ses">Sesión activa</small></div>
+    <button class="tb-out" onclick="lgSalir()" title="Cerrar sesión" aria-label="Cerrar sesión"><span data-ic="salir"></span><span class="lb">Salir</span></button></div></div>
+</aside>
+<div class="ui-toast" id="ui-toast" role="status" aria-live="polite"></div>
+
+
+<div class="overlay" id="overlay">
+  <div class="modal-box" id="modal-box" role="alertdialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-msg">
+    <div class="md-head"><span class="md-ico" id="modal-ico"></span><h3 id="modal-title"></h3></div>
+    <p id="modal-msg"></p>
+    <div class="md-actions"><button class="btn btn-cancel" onclick="cerrarModal()">Cancelar</button><button class="btn btn-ok" id="modal-ok" onclick="modalAceptar()">Aceptar</button></div>
+  </div>
+</div>
+
+
+<!-- 1. Núcleo  -->
+<script src="js/nucleo/configuracion.js"></script>
+<script src="js/nucleo/utilidades.js"></script>
+<script src="js/nucleo/campos.js"></script>
+<script src="js/nucleo/registro_modulos.js"></script>
+<script src="js/nucleo/almacenamiento.js"></script>
+<script src="js/nucleo/revision.js"></script>
+<script src="js/nucleo/memoria.js"></script>
+<script src="js/nucleo/svg_comun.js"></script>
+<script src="js/nucleo/sesion.js"></script>
+<script src="js/nucleo/login_decor.js"></script>
+<script src="js/nucleo/navegacion.js"></script>
+<script src="js/nucleo/autocalculo.js"></script>
+
+<!-- 2. Módulos generales: únicos dueños de tablas y de términos de referencia -->
+<script src="js/modulos/datos_preliminares/tablas.js"></script>
+<script src="js/modulos/datos_preliminares/datos_preliminares.js"></script>
+<script src="js/modulos/terminos_referencia/rangos.js"></script>
+<script src="js/modulos/terminos_referencia/tarjetas.js"></script>
+<script src="js/modulos/terminos_referencia/terminos_referencia.js"></script>
+
+<!-- 3. Módulos de cálculo (SVG antes de la lógica cuando aplica) -->
+<script src="js/modulos/proyeccion_poblacional/dane_datos.js"></script>
+<script src="js/modulos/proyeccion_poblacional/proyeccion_poblacional.js"></script>
+<script src="js/modulos/caudal/caudal.js"></script>
+<script src="js/modulos/rejilla/rejilla_svg.js"></script>
+<script src="js/modulos/rejilla/rejilla.js"></script>
+<script src="js/modulos/aduccion/aduccion_svg.js"></script>
+<script src="js/modulos/aduccion/aduccion.js"></script>
+<script src="js/modulos/desarenador/desarenador_svg.js"></script>
+<script src="js/modulos/desarenador/desarenador.js"></script>
+<script src="js/modulos/parshall/parshall_svg.js"></script>
+<script src="js/modulos/parshall/parshall.js"></script>
+<script src="js/modulos/proximos/proximos.js"></script>
+<!-- Módulo nuevo: agregar aquí sus scripts 
+
+<!-- 4. Arranque -->
+<script src="js/nucleo/inicializacion.js"></script>
+
+</body>
+</html>
