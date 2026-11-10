@@ -1,0 +1,41 @@
+TREPALACE — ARQUITECTURA MODULAR
+
+ABRIR
+1. Descomprime la carpeta completa.
+2. Abre index.html con doble clic (no requiere servidor ni módulos ES).
+3. Opcional: python3 construir.py genera Trepalace.html (un solo archivo).
+
+ESTRUCTURA
+css/estilos.css
+js/nucleo/            Solo funciones generales (sin datos ni reglas de módulos):
+  configuracion.js      usuarios, grupos del menú, PRO, iconos genéricos, logo
+  utilidades.js         nf, rnd, gid, esc, esPos, esVacio, normFix
+  campos.js             campo, selec, tablaHTML, nota (componentes compartidos)
+  almacenamiento.js     localStorage, guardar/cargar .json, estado extra de módulos
+  registro_modulos.js   MODULOS, modulo(), moduloApi(), moduloListo(), inicializarPRO(), normalizarPro()
+  revision.js, memoria.js, svg_comun.js
+  autocalculo.js        recalcula solo al cambiar de campo o con Enter. Si un dato ingresado está mal: solo REVISIÓN DE ERRORES
+                        (memoria bloqueada). Si los datos están bien: memoria, VER/CONTRAER y REVISIÓN DE ERRORES.
+                        (cada módulo declara recalcular:function y errores:function en su MODULOS.push)
+  sesion.js             login / solo lectura
+  navegacion.js         menú, vistas, Inicio, estados e IMPRIMIR generados desde MODULOS
+  inicializacion.js     arranque
+js/modulos/
+  datos_preliminares/   ÚNICO dueño de tablas y constantes: DP.T.<nombre>, DP.nivelComplejidad()
+  terminos_referencia/  ÚNICO dueño de rangos y parámetros: TR.R.<nombre>, tarjetas registradas con TR.registrarTarjeta()
+  proyeccion_poblacional/, caudal/, rejilla/, aduccion/, desarenador/, parshall/   (solo cálculo, validación, SVG y memoria)
+  proximos/             marcadores "PRÓXIMAMENTE" (Módulo 7 y 8)
+  plantilla/            molde para módulos nuevos (instrucciones en el encabezado)
+
+REGLAS
+- Un módulo de cálculo no define tablas, rangos ni datosPreliminares/terminosReferencia.
+- Un módulo se registra con MODULOS.push({id, titulo, grupo, orden, icono, iconoSvg, valores, normalizar, completo, pintar, ...})
+  (propiedades documentadas en js/nucleo/registro_modulos.js). El menú, la vista, el Inicio, el indicador ●/○,
+  los valores por defecto de PRO y la normalización salen de ese registro.
+- Para agregar un módulo: copiar plantilla/, agregar sus <script> en index.html, y (si aplica) sus tablas en
+  datos_preliminares/tablas.js y su tarjeta/rangos en terminos_referencia/.
+
+LIMITACIONES CONOCIDAS (ver VERIFICACION.txt)
+- Las tarjetas de TR de cada unidad viven dentro del módulo TR (según el diseño solicitado); un módulo nuevo con parámetros requiere agregar su tarjeta allí.
+- Algunos límites de validación escritos como números dentro de los módulos de cálculo (p. ej. Ha/W 0,4–0,8; H 0,75–1,5 m) no se movieron a TR para no alterar el comportamiento.
+- Los valores por defecto de Parshall (parPct, parHaW, ...) siguen aplicándose de forma perezosa en parshall.js, como en el original.
