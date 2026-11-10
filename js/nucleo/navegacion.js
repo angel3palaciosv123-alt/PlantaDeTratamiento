@@ -108,7 +108,7 @@ function pintarInicio(){
   var listos=SEG.filter(function(m){return moduloListo(m.id);}).length;
   var pct=Math.round(listos*100/SEG.length);
   var h='<div class="dash">';
-  h+='<section class="dash-hero"><div class="hero-logo">'+LOGO+'</div><div><h1>TRESPALACE</h1>'+
+  h+='<section class="dash-hero"><div class="hero-logo">'+LOGO+'</div><div><h1>TREPALACE</h1>'+
      '<div class="sub">SOLUCIONES AMBIENTALES PARA TUS PROYECTOS<br>BASADAS EN TUS NECESIDADES</div>'+
      '<p>Bienvenido'+(usr?' '+esc(usr):'')+' a la plataforma de diseño de plantas de tratamiento de agua residual. Aquí podrás diseñartodas las unidades que hacen parte de un Sistema de Tratamiento de Agua Residual.</p>'+
      '<div class="hero-acts">'+
