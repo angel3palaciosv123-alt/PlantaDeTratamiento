@@ -1,0 +1,70 @@
+TREPALACE — ARQUITECTURA MODULAR POR TIPO DE PROYECTO
+
+ABRIR
+1. Descomprime la carpeta completa.
+2. Abre index.html con doble clic (no requiere servidor ni módulos ES).
+3. Opcional: python3 construir.py genera Trepalace.html (un solo archivo).
+   Trepalace.html debe quedar junto a la carpeta img/ (logos y fotos de los proyectos).
+
+FLUJO DE LA PLATAFORMA
+Inicio de sesión -> pantalla principal con los 4 tipos de proyecto -> Entrar a un tipo.
+Dentro de un tipo, el riel de la izquierda permite cambiar de tipo o volver a "Todos los proyectos".
+Cada tipo guarda su proyecto por separado en el navegador y en su propio archivo .json.
+El proyecto de agua residual conserva la clave original ("ptarProyecto"): lo ya guardado sigue ahí.
+
+TIPOS DE PROYECTO Y SUFIJOS
+  STAR  Sistemas de tratamiento de agua residual   js/modulos/star/   (módulos en uso)
+  STAP  Sistemas de tratamiento de agua potable    js/modulos/stap/   (próximamente)
+  IHS   Redes e instalaciones hidrosanitarias      js/modulos/ihs/    (próximamente)
+  RS    Diseño de relleno sanitario                js/modulos/rs/     (próximamente)
+Todo nombre global de un módulo (funciones, variables y el id del módulo) termina en el sufijo de
+su tipo: calcularCaudal_STAR(), DP_STAR, TR_STAR, id "caudal_STAR". Así, cuando hagas el caudal
+de agua potable, se llamará calcularCaudal_STAP() y no chocará con el de agua residual.
+Las claves de datos guardados (PRO.Qmd, PRO.REJ, ...) NO cambiaron, para que los proyectos .json
+antiguos se sigan cargando.
+
+ESTRUCTURA
+css/estilos.css           estilos (al final: capa de tipos de proyecto, riel, pantalla principal y login verde)
+img/                      logos
+img/proyectos/            foto del banner de cada tipo: STAR.jpg, STAP.jpg, IHS.jpg, RS.jpg
+                          Para cambiar una foto, reemplaza el archivo con el mismo nombre (formato .jpg,
+                          horizontal, unos 1200 x 700 px). STAP, IHS y RS traen una imagen provisional.
+js/nucleo/                funciones generales (sin datos ni reglas de módulos):
+  configuracion.js          usuarios, TIPOS de proyecto (estado, descripción, imagen), grupos del menú, iconos
+  utilidades.js             nf, rnd, gid, esc, esPos, esVacio, normFix
+  campos.js                 campo, selec, tablaHTML, nota
+  registro_modulos.js       MODULOS, modulo(), moduloApi(), moduloListo(), filtro por tipo (modulosOrdenados)
+  almacenamiento.js         guardado por tipo, archivo .json (con el tipo de proyecto)
+  revision.js, memoria.js, svg_comun.js
+  sesion.js                 inicio y cierre de sesión
+  login_decor.js            hojas y viento del login (en verde)
+  proyectos.js              pantalla principal de proyectos, riel lateral y cambio de tipo
+  navegacion.js             menú, vistas, Inicio de cada tipo e imprimir
+  autocalculo.js            recálculo al cambiar un campo
+  inicializacion.js         arranque
+js/modulos/star/          datos_preliminares, terminos_referencia, proyeccion_poblacional, caudal,
+                          rejilla, aduccion, desarenador, parshall, proximos (Módulo 7 y 8)
+js/modulos/stap|ihs|rs/   proximos/proximos_<TIPO>.js  (módulos "PRÓXIMAMENTE" de cada tipo)
+js/modulos/plantilla/     molde para módulos nuevos (instrucciones en el encabezado)
+
+CAMBIAR TEXTOS DE LA PANTALLA PRINCIPAL
+En js/nucleo/configuracion.js, dentro de TIPOS, cada proyecto tiene:
+  estado: "DISPONIBLE" | "PRÓXIMAMENTE" | "EN CONSTRUCCIÓN"   (se muestra tal cual)
+  desc:   descripción de la tarjeta
+  imagen: ruta de la foto del banner
+
+AGREGAR UN MÓDULO
+1. Copia js/modulos/plantilla/ dentro de la carpeta del tipo (p. ej. js/modulos/stap/floculador/).
+2. Reemplaza _TIPO por el sufijo del tipo (_STAP, _IHS, _RS o _STAR).
+3. Agrega sus <script> en index.html dentro del bloque de ese tipo.
+4. Borra su marcador en js/modulos/<tipo>/proximos/proximos_<TIPO>.js.
+
+REGLAS (sin cambios)
+- Un módulo de cálculo no define tablas, rangos ni datosPreliminares/terminosReferencia.
+- Un módulo se registra con MODULOS.push({id, titulo, grupo, orden, icono, iconoSvg, valores, normalizar,
+  completo, pintar, ...}) (propiedades documentadas en js/nucleo/registro_modulos.js).
+
+LIMITACIONES CONOCIDAS
+- Las tarjetas de TR de cada unidad viven dentro del módulo TR (según el diseño solicitado); un módulo nuevo con parámetros requiere agregar su tarjeta allí.
+- Algunos límites de validación escritos como números dentro de los módulos de cálculo (p. ej. Ha/W 0,4–0,8; H 0,75–1,5 m) no se movieron a TR para no alterar el comportamiento.
+- Los valores por defecto de Parshall (parPct, parHaW, ...) siguen aplicándose de forma perezosa en parshall.js, como en el original.

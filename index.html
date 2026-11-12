@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Trepalace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body class="modo-hub">
+
+<!-- =======================================================
+   INICIO DE SESION
+   ======================================================= -->
+<div id="login-wrap">
+  <section class="lg-visual">
+    <div class="lg-capa" id="lg-viento"></div>
+    <div class="lg-capa" id="lg-burb"></div>
+    <div class="lg-capa" id="lg-hojas"></div>
+    <div class="lg-centro">
+      <div class="lg-logo"><img class="em" alt="" src="img/logo_emblema.png"><img class="tx" alt="TREPALACE" src="img/logo_nombre.png"></div>
+      <div class="lg-lema">Soluciones ambientales y sanitarias para tus proyectos basados en tus necesidades</div>
+    </div>
+    <div class="lg-olas" aria-hidden="true">
+      <div class="lg-ola lg-o1"><svg viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0 60 C100 20 200 20 300 60 S500 100 600 60 S800 20 900 60 S1100 100 1200 60 V120H0Z"/></svg></div>
+      <div class="lg-ola lg-o2"><svg viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0 70 C100 100 200 100 300 70 S500 40 600 70 S800 100 900 70 S1100 40 1200 70 V120H0Z"/></svg></div>
+      <div class="lg-ola lg-o3"><svg viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0 80 C100 55 200 55 300 80 S500 105 600 80 S800 55 900 80 S1100 105 1200 80 V120H0Z"/></svg></div>
+    </div>
+  </section>
+  <section class="lg-lado">
+    <div id="lg-card">
+      <div class="lg-barra"></div>
+      <h2>Accede a tu proyecto</h2>
+      <p class="lg-sub">Ingresa tu usuario y contraseña para continuar.</p>
+      <div class="lg-campo">
+        <input id="lg-u" placeholder=" " autocomplete="username"><label for="lg-u">Usuario</label>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.2-6 8-6s6.8 2 8 6"/></svg>
+      </div>
+      <div class="lg-campo">
+        <input id="lg-p" type="password" placeholder=" " autocomplete="current-password"><label for="lg-p">Contraseña</label>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        <button type="button" class="lg-ojo" id="lg-ojo" aria-label="Mostrar u ocultar contraseña"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+      <div id="login-err" role="alert"></div>
+      <button id="lg-btn" type="button" onclick="lgEntrar()"><span class="txt">INICIAR SESIÓN</span><span class="giro"></span></button>
+      <button type="button" class="lg-olvido" onclick="var e=document.getElementById('login-err');e.textContent='Solicita el restablecimiento de tu contraseña al administrador del proyecto.';e.style.display='block'">¿Olvidaste tu contraseña?</button>
+      <div class="lg-pie">© TREPALACE 2026 </div>
+    </div>
+  </section>
+</div>
+
+<!-- =======================================================
+   PANTALLA PRINCIPAL DE PROYECTOS 
+   ======================================================= -->
+<div id="hub">
+  <header class="hub-top">
+    <div class="marca"><img class="em" alt="" src="img/logo_emblema.png"><img class="tx" alt="TREPALACE" src="img/logo_nombre.png"></div>
+    <div class="esp"></div>
+    <div class="hub-usr"><span class="sb-av" id="hub-av">?</span><div><b id="hub-nom"></b><small>Sesión activa</small></div></div>
+    <button class="hub-salir" onclick="lgSalir()"><span data-ic="salir"></span>Salir</button>
+  </header>
+  <main class="hub-main">
+    <section class="hub-hero">
+      <div>
+        <div class="eyebrow">Plataforma de diseño</div>
+        <h1 id="hub-saludo">Bienvenido</h1>
+        <p>Herramienta de cálculo y diseño de infraestructura para agua potable, saneamiento básico y residuos sólidos, basada en el Reglamento Técnico del Sector de Agua Potable y Saneamiento Básico (RAS) y la normativa colombiana vigente. Selecciona el tipo de proyecto para iniciar o continuar su memoria de cálculo.</p>
+      </div>
+      <div class="em-grande" aria-hidden="true"><img alt="" src="img/logo_emblema.png"></div>
+    </section>
+    <div class="hub-resumen" id="hub-resumen"></div>
+    <div class="dash-h"><h2>¿Qué vas a diseñar hoy?</h2></div>
+    <div class="tipo-grid" id="tipo-grid"></div>
+  </main>
+</div>
+
+<!-- =======================================================
+   BARRA SUPERIOR EN CELULAR 
+   ======================================================= -->
+<header class="m-bar" id="m-bar"><button class="sb-burger" id="sb-burger" aria-label="Abrir menú" aria-controls="topbar" aria-expanded="false" onclick="sbAbrirMovil()"><span data-ic="menu"></span></button><div class="m-logo"><img class="em" alt="" src="img/logo_emblema.png"><img class="tx" alt="TREPALACE" src="img/logo_nombre.png"></div></header>
+<div class="sb-scrim" id="sb-scrim" onclick="sbCerrarMovil()"></div>
+<nav class="rail" id="rail" aria-label="Tipos de proyecto">
+  <div class="rail-logo"><img src="img/logo_emblema.png" alt="TREPALACE"></div>
+  <button class="rail-btn" data-tip="Todos los proyectos" aria-label="Todos los proyectos" onclick="mostrarProyectos()"><span data-ic="grid"></span></button>
+  <div class="rail-sep"></div>
+  <div id="rail-tipos" style="display:flex;flex-direction:column;gap:6px"></div>
+  <div class="rail-esp"></div>
+  <div class="sb-av" id="rail-av">?</div>
+  <button class="rail-btn rail-out" data-tip="Cerrar sesión" aria-label="Cerrar sesión" onclick="lgSalir()"><span data-ic="salir"></span></button>
+</nav>
+
+<!-- =======================================================
+   BARRA LATERAL
+   ======================================================= -->
+<aside class="sb" id="topbar" aria-label="Navegación principal">
+  <div class="sb-head"><div id="sb-marca" style="display:contents"></div>
+    <button class="sb-collapse" id="sb-collapse" onclick="sbAlternar()" aria-expanded="true" aria-label="Contraer menú" title="Contraer menú"><span data-ic="colapsar"></span></button></div>
+  <nav class="sb-scroll"></nav>
+  <div class="sb-foot"><div class="lbl">Cuenta</div><div class="sb-usr"><div class="sb-av" id="sb-av">?</div><div class="sb-who"><span class="tb-user" id="tb-user"></span><small id="sb-ses">Sesión activa</small></div>
+    <button class="tb-out" onclick="lgSalir()" title="Cerrar sesión" aria-label="Cerrar sesión"><span data-ic="salir"></span><span class="lb">Salir</span></button></div></div>
+</aside>
+<div class="ui-toast" id="ui-toast" role="status" aria-live="polite"></div>
+
+
+<div class="overlay" id="overlay">
+  <div class="modal-box" id="modal-box" role="alertdialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-msg">
+    <div class="md-head"><span class="md-ico" id="modal-ico"></span><h3 id="modal-title"></h3></div>
+    <p id="modal-msg"></p>
+    <div class="md-actions"><button class="btn btn-cancel" onclick="cerrarModal()">Cancelar</button><button class="btn btn-ok" id="modal-ok" onclick="modalAceptar()">Aceptar</button></div>
+  </div>
+</div>
+
+
+<!-- =======================================================
+   1. NÚCLEO (general, sin datos de ningún módulo)
+   ======================================================= -->
+<!-- Configuración: usuarios, TIPOS de proyecto (estado, descripción, imagen), grupos del menú e iconos -->
+<script src="js/nucleo/configuracion.js"></script>
+<!-- Utilidades: formato de números, redondeo, escape -->
+<script src="js/nucleo/utilidades.js"></script>
+<!-- Campos de formulario y tablas compartidas -->
+<script src="js/nucleo/campos.js"></script>
+<!-- Registro de módulos (MODULOS) y filtro por tipo de proyecto -->
+<script src="js/nucleo/registro_modulos.js"></script>
+<!-- Guardado en el navegador y archivo .json (separado por tipo de proyecto) -->
+<script src="js/nucleo/almacenamiento.js"></script>
+<!-- Revisión de errores, advertencias y avisos -->
+<script src="js/nucleo/revision.js"></script>
+<!-- Memoria de cálculo desplegable -->
+<script src="js/nucleo/memoria.js"></script>
+<!-- Cotas y marcadores comunes de los dibujos SVG -->
+<script src="js/nucleo/svg_comun.js"></script>
+<!-- Inicio y cierre de sesión -->
+<script src="js/nucleo/sesion.js"></script>
+<!-- Decoración animada del login (hojas y viento) -->
+<script src="js/nucleo/login_decor.js"></script>
+<!-- Pantalla principal de proyectos, riel lateral y cambio de tipo -->
+<script src="js/nucleo/proyectos.js"></script>
+<!-- Menú, vistas, Inicio de cada tipo e impresión -->
+<script src="js/nucleo/navegacion.js"></script>
+<!-- Recálculo automático al editar un campo -->
+<script src="js/nucleo/autocalculo.js"></script>
+
+<!-- =======================================================
+   2. STAR · SISTEMAS DE TRATAMIENTO DE AGUA RESIDUAL (js/modulos/star/)
+   ======================================================= -->
+<!-- Datos preliminares: tablas del RAS (dotaciones, niveles de complejidad, coeficientes, infiltración) -->
+<script src="js/modulos/star/datos_preliminares/tablas.js"></script>
+<script src="js/modulos/star/datos_preliminares/datos_preliminares.js"></script>
+<!-- Términos de referencia: rangos, tarjetas de parámetros y ventana del proyecto -->
+<script src="js/modulos/star/terminos_referencia/rangos.js"></script>
+<script src="js/modulos/star/terminos_referencia/tarjetas.js"></script>
+<script src="js/modulos/star/terminos_referencia/terminos_referencia.js"></script>
+<!-- Proyección poblacional: censos DANE y métodos lineal, geométrico y exponencial -->
+<script src="js/modulos/star/proyeccion_poblacional/dane_datos.js"></script>
+<script src="js/modulos/star/proyeccion_poblacional/proyeccion_poblacional.js"></script>
+<!-- Caudal de diseño: doméstico, no doméstico, infiltración y conexiones erradas -->
+<script src="js/modulos/star/caudal/caudal.js"></script>
+<!-- Rejilla: cribado, dimensiones, barrotes y pérdidas de carga (dibujo + cálculo) -->
+<script src="js/modulos/star/rejilla/rejilla_svg.js"></script>
+<script src="js/modulos/star/rejilla/rejilla.js"></script>
+<!-- Aducción: canal y tubería entre rejilla y desarenador, golpe de ariete (dibujo + cálculo) -->
+<script src="js/modulos/star/aduccion/aduccion_svg.js"></script>
+<script src="js/modulos/star/aduccion/aduccion.js"></script>
+<!-- Desarenador: remoción de arena fina por sedimentación (dibujo + cálculo) -->
+<script src="js/modulos/star/desarenador/desarenador_svg.js"></script>
+<script src="js/modulos/star/desarenador/desarenador.js"></script>
+<!-- Canaleta Parshall: garganta, resalto hidráulico, gradiente de velocidad y cresta (dibujo + cálculo) -->
+<script src="js/modulos/star/parshall/parshall_svg.js"></script>
+<script src="js/modulos/star/parshall/parshall.js"></script>
+<!-- Próximamente: Módulo 7 (clarificación) y Módulo 8 (desinfección) -->
+<script src="js/modulos/star/proximos/proximos.js"></script>
+
+<!-- =======================================================
+   3. STAP · SISTEMAS DE TRATAMIENTO DE AGUA POTABLE (js/modulos/stap/)
+   ======================================================= -->
+<!-- Próximamente: datos, proyección, caudal, mezcla rápida, floculador, sedimentador, filtración, desinfección y almacenamiento -->
+<script src="js/modulos/stap/proximos/proximos_STAP.js"></script>
+
+<!-- =======================================================
+   4. IHS · REDES E INSTALACIONES HIDROSANITARIAS (js/modulos/ihs/)
+   ======================================================= -->
+<!-- Próximamente: datos, aparatos, agua fría y caliente, desagües, aguas lluvias, acueducto y alcantarillados -->
+<script src="js/modulos/ihs/proximos/proximos_IHS.js"></script>
+
+<!-- =======================================================
+   5. RS · DISEÑO DE RELLENO SANITARIO (js/modulos/rs/)
+   ======================================================= -->
+<!-- Próximamente: datos, proyección, generación, volumen y área, celda diaria, lixiviados, gases y vida útil -->
+<script src="js/modulos/rs/proximos/proximos_RS.js"></script>
+
+<!-- Módulo nuevo: agrega aquí sus <script>, dentro del bloque de su tipo de proyecto. -->
+
+<!-- =======================================================
+   6. ARRANQUE 
+   ======================================================= -->
+<script src="js/nucleo/inicializacion.js"></script>
+
+</body>
+</html>
